@@ -9,12 +9,12 @@ app.use(cors())
 
 mongoose.connect("mongodb://127.0.0.1:27017/employee");
 
-app.post('/login',(req,res) => {
-    const {unm,pass,role} = req.body;
-    UserModel.findOne({unm:unm})
-    .then(user=>{
-        if(user){
-            if(user.pass==pass){
+app.post('/Emp_Login',(req,res) => {
+    const {email,pass} = req.body;
+    EmpModel.findOne({email:email})
+    .then(emp=>{
+        if(emp){
+            if(emp.pass==pass){
                 res.json("Success")
             }
             else{
@@ -27,29 +27,11 @@ app.post('/login',(req,res) => {
     })
 })
 
-app.post('/register', async (req, res) => {
-    try {
-        const newEmployee = new EmpModel({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            phone: req.body.phone,
-            dateOfBirth: req.body.dateOfBirth,
-            gender: req.body.gender,
-            department: req.body.department,
-            designation: req.body.designation,
-            dateOfJoining: req.body.dateOfJoining,
-            employmentType: req.body.employmentType,
-            salary: req.body.salary,
-            password: req.body.password
-        });
-
-        const savedEmployee = await newEmployee.save();
-        res.status(201).json(savedEmployee);
-    } catch (error) {
-        console.error("Error registering employee:", error);
-        res.status(500).json({ message: "Server error", error });
-    }
+app.post('/Emp_Register', (req, res) => {
+    //const[fnm,lnm,email,phone,dob,gender,pass,confPass] = req.body
+    EmpModel.create(req.body)
+    .then(emp=>req.json(emp))
+    .catch(err=>res.json(err))
 });
 
 app.listen(3001,()=>{
