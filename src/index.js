@@ -8,6 +8,7 @@ import Header from './pages/Header';
 import Emp_Login from './pages/Emp_Login';
 import Emp_Register from './pages/Emp_Register';
 import Role from './pages/Role'
+import Logout from './pages/Logout'
 import { AuthProvider } from './pages/Auth_Context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,6 +22,7 @@ root.render(
           <Route path='/Emp_Login' element={<Emp_Login />} />
           <Route path='/Emp_Register' element={<Emp_Register />} />
           <Route path='/Role' element={<Role />} />
+          <Route path='/Logout' element={<Logout />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

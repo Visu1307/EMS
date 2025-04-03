@@ -13,7 +13,7 @@ function App() {
             <Image src={Hero} />
           </Col>
           <Col className="mt-5">
-            <h1>Hii {authData.email}, Your Role Is : {authData.role}</h1>
+            <h1>Hii {authData.fnm}, Your Role Is : {authData.email}</h1>
             <h1>Effortless Employee Management</h1>
             <p>Streamline your HR operations with our powerful Employee Management System. Track attendance, manage payroll, monitor performance, and simplify employee records—all in one place. Boost productivity and efficiency with ease!</p>
             <Link to={'/Role'}><Button className="btn-lg" variant="primary">Checkout Now!</Button></Link>

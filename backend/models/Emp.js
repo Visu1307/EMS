@@ -7,7 +7,9 @@ const EmployeeSchema = new mongoose.Schema({
   phone: String,
   dateOfBirth: Date,
   gender: String,
+  role: String,
   pass: String
 })
+
 const EmpModel = mongoose.model('emp', EmployeeSchema);
 module.exports = EmpModel

@@ -4,20 +4,21 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Emp_Register = () => {
-  const[fnm,setFnm] = useState()
-  const[lnm,setLnm] = useState()
+  const[firstName,setFnm] = useState()
+  const[lastName,setLnm] = useState()
   const[email,setEmail] = useState()
   const[phone,setPhone] = useState()
   const[dob,setDOB] = useState()
   const[gender,setGender] = useState()
   const[pass,setPass] = useState()
   const[confPass,setconfPass] = useState()
+  const role = 'emp'
   const navigate = useNavigate()
 
   const validateForm = () => {
     return (
-      fnm.trim() !== '' &&
-      lnm.trim() !== '' &&
+      firstName.trim() !== '' &&
+      lastName.trim() !== '' &&
       email.trim() !== '' &&
       phone.trim() !== '' &&
       dob.trim() !== '' &&
@@ -36,10 +37,10 @@ const Emp_Register = () => {
     }
 
     axios
-      .post('http://localhost:3001/EmpRegister',{fnm,lnm,email,phone,dob,gender,pass,confPass})
+      .post('http://localhost:3001/Emp_Register',{firstName,lastName,email,phone,dob,gender,role,pass})
       .then((result)=>console.log('Employee Registered Successfully',result.data))
       alert('Employee Registered Successfully')
-      navigate('/Login')
+      navigate('/Emp_Login')
   }
 
   return (
@@ -50,13 +51,13 @@ const Emp_Register = () => {
           <Col md={6}>
             <Form.Group controlId="firstName">
               <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" name="firstName" value={fnm} onChange={(e) => setFnm(e.target.value)} required />
+              <Form.Control type="text" name="firstName" value={firstName} onChange={(e) => setFnm(e.target.value)} required />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="lastName">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" name="lastName" value={lnm} onChange={(e) => setLnm(e.target.value)} required />
+              <Form.Control type="text" name="lastName" value={lastName} onChange={(e) => setLnm(e.target.value)} required />
             </Form.Group>
           </Col>
         </Row>

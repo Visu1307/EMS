@@ -21,8 +21,9 @@ function Emp_Login() {
     e.preventDefault()
     axios.post("http://localhost:3001/Emp_Login",{email,pass})
     .then(res => {
-      if(res.data==="Success"){
-        setAuthData({ email, role });
+      if(res.data.status==="Success"){
+        const fnm=res.data.firstName;
+        setAuthData({fnm,email,role})
         navigate('/')
       }
       else{

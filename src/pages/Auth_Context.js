@@ -4,7 +4,7 @@ export const AuthContext = createContext();
 
 // Create the provider component
 export const AuthProvider = ({ children }) => {
-  const [authData, setAuthData] = useState({ email: '', role: '' });
+  const [authData, setAuthData] = useState({ fnm:'',email: '', role: '' });
 
   return (
     <AuthContext.Provider value={{ authData, setAuthData }}>

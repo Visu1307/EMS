@@ -15,7 +15,7 @@ app.post('/Emp_Login',(req,res) => {
     .then(emp=>{
         if(emp){
             if(emp.pass==pass){
-                res.json("Success")
+                res.json({status:"Success",firstName:emp.firstName})
             }
             else{
                 res.json("Password doesn't match")
