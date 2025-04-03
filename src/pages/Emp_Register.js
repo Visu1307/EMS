@@ -1,59 +1,62 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const EmpRegister = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    dateOfBirth: "",
-    gender: "",
-    department: "",
-    designation: "",
-    dateOfJoining: "",
-    employmentType: "",
-    salary: "",
-    password: "",
-    confirmPassword: "",
-  });
+const Emp_Register = () => {
+  const[fnm,setFnm] = useState()
+  const[lnm,setLnm] = useState()
+  const[email,setEmail] = useState()
+  const[phone,setPhone] = useState()
+  const[dob,setDOB] = useState()
+  const[gender,setGender] = useState()
+  const[pass,setPass] = useState()
+  const[confPass,setconfPass] = useState()
+  const navigate = useNavigate()
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const validateForm = () => {
+    return (
+      fnm.trim() !== '' &&
+      lnm.trim() !== '' &&
+      email.trim() !== '' &&
+      phone.trim() !== '' &&
+      dob.trim() !== '' &&
+      gender.trim() !=='' &&
+      pass.trim() !== '' &&
+      confPass.trim() !== '' &&
+      pass === confPass
+    );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if(!validateForm()){
+      alert('Please fill out all fields and make sure passwords does match')
+      return
     }
-    try {
-      const response = await axios.post("http://localhost:5000/api/employees", formData);
-      console.log("Employee Registered: ", response.data);
-      alert("Registration Successful");
-    } catch (error) {
-      console.error("Error registering employee: ", error);
-      alert("Registration Failed");
-    }
-  };
+
+    axios
+      .post('http://localhost:3001/EmpRegister',{fnm,lnm,email,phone,dob,gender,pass,confPass})
+      .then((result)=>console.log('Employee Registered Successfully',result.data))
+      alert('Employee Registered Successfully')
+      navigate('/Login')
+  }
 
   return (
-    <Container className="mt-5">
-      <h2 className="text-center">Employee Registration</h2>
+    <Container className="my-5">
+      <h2 className="text-center text-primary my-3">Employee Registration</h2>
       <Form onSubmit={handleSubmit}>
         <Row>
           <Col md={6}>
             <Form.Group controlId="firstName">
               <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+              <Form.Control type="text" name="firstName" value={fnm} onChange={(e) => setFnm(e.target.value)} required />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="lastName">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
+              <Form.Control type="text" name="lastName" value={lnm} onChange={(e) => setLnm(e.target.value)} required />
             </Form.Group>
           </Col>
         </Row>
@@ -61,13 +64,13 @@ const EmpRegister = () => {
           <Col md={6}>
             <Form.Group controlId="email">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
+              <Form.Control type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="phone">
               <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+              <Form.Control type="text" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
             </Form.Group>
           </Col>
         </Row>
@@ -75,13 +78,13 @@ const EmpRegister = () => {
           <Col md={6}>
             <Form.Group controlId="dateOfBirth">
               <Form.Label>Date of Birth</Form.Label>
-              <Form.Control type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
+              <Form.Control type="date" name="dateOfBirth" value={dob} onChange={(e) => setDOB(e.target.value)} required />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="gender">
               <Form.Label>Gender</Form.Label>
-              <Form.Select name="gender" value={formData.gender} onChange={handleChange} required>
+              <Form.Select name="gender" value={gender} onChange={(e) => setGender(e.target.value)} required>
                 <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -90,8 +93,8 @@ const EmpRegister = () => {
             </Form.Group>
           </Col>
         </Row>
-        <Row>
-          <Col md={6}>
+        {/* <Row> */}
+          {/* <Col md={6}>
             <Form.Group controlId="department">
               <Form.Label>Department</Form.Label>
               <Form.Control type="text" name="department" value={formData.department} onChange={handleChange} required />
@@ -126,18 +129,18 @@ const EmpRegister = () => {
         <Form.Group controlId="salary">
           <Form.Label>Salary</Form.Label>
           <Form.Control type="number" name="salary" value={formData.salary} onChange={handleChange} required />
-        </Form.Group>
+        </Form.Group> */}
         <Row>
           <Col md={6}>
             <Form.Group controlId="password">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} required />
+              <Form.Control type="password" name="password" value={pass} onChange={(e) => setPass(e.target.value)} required />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="confirmPassword">
               <Form.Label>Confirm Password</Form.Label>
-              <Form.Control type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+              <Form.Control type="password" name="confirmPassword" value={confPass} onChange={(e) => setconfPass(e.target.value)} required />
             </Form.Group>
           </Col>
         </Row>
@@ -147,4 +150,4 @@ const EmpRegister = () => {
   );
 };
 
-export default EmpRegister;
+export default Emp_Register;

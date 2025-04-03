@@ -1,24 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter,Route,Routes} from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Header from './pages/Header';
-import Login from './pages/Login';
-import EmpRegister from './pages/EmpRegister';
+import Emp_Login from './pages/Emp_Login';
+import Emp_Register from './pages/Emp_Register';
+import Role from './pages/Role'
+import { AuthProvider } from './pages/Auth_Context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Header/>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<App/>} />
-        <Route path='/login' element={<Login/>} />
-        <Route path='/EmpReg' element={<EmpRegister/>} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path='/' element={<App />} />
+          <Route path='/Emp_Login' element={<Emp_Login />} />
+          <Route path='/Emp_Register' element={<Emp_Register />} />
+          <Route path='/Role' element={<Role />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>
 );
 

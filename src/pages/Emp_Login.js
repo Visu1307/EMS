@@ -1,36 +1,39 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
 import loginImage from '../images/Login.gif';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from './Auth_Context';
 
-function Login() {
-  const [unm,setUnm] = useState('')
+function Emp_Login() {
+  const [email,setEmail] = useState('')
   const [pass,setPass] = useState('')
-  const [role,setRole] = useState('')
+  const role = 'emp'
+  const {setAuthData} = useContext(AuthContext)
   const navigate = useNavigate()
   const validateForm = () => {
     return(
-      unm.trim() !== '' &&
+      email.trim() !== '' &&
       pass.trim() !== ''
     )
   }
   const handleSubmit = (e) => {
     e.preventDefault()
-    axios.post("http://localhost:3001/login",{unm,pass,role})
+    axios.post("http://localhost:3001/Emp_Login",{email,pass})
     .then(res => {
       if(res.data==="Success"){
+        setAuthData({ email, role });
         navigate('/')
       }
       else{
-        alert("Login Failed")
+        alert(res.data)
       }
     })
   }
   return (
     <div>
       <section className="vh-100">
-        <Container fluid className="h-custom">
+        <Container fluid className="h-custom my-5">
           <Row className="d-flex justify-content-center align-items-center h-100">
             <Col xs={12} md={9} lg={6} xl={5}>
               <img
@@ -42,21 +45,16 @@ function Login() {
             <Col xs={12} md={8} lg={6} xl={4} className="offset-xl-1">
               <Form onSubmit={handleSubmit}>
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-center justify-content-lg-start">
-                  <p className="lead fw-normal mb-0 me-3">Sign in as </p>
-                  <select className='bg-primary text-white' onChange={(e)=>setRole(e.target.value)}>
-                    <option value={'emp'}>Employee</option>
-                    <option value={'hr'}>HR</option>
-                    <option value={'admin'}>Admin</option>
-                  </select>
+                  <p className="fs-1">Employee Login</p>
                 </div>
 
                 {/* Email input */}
                 <Form.Group className="mb-4" controlId="form3Example3">
-                  <Form.Label>Username</Form.Label>
+                  <Form.Label>Email</Form.Label>
                   <Form.Control
-                    type="text"
-                    placeholder="Enter username"
-                    onChange={(e) => setUnm(e.target.value)}
+                    type="email"
+                    placeholder="Enter Email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Form.Group>
 
@@ -81,7 +79,7 @@ function Login() {
                     Login
                   </Button>
                   <p className="small fw-bold mt-2 pt-1 mb-0">
-                    Don't have an account? <Link to="/EmpRegister" className="link-primary">Register</Link>
+                    Don't have an account? <Link to="/Emp_Register" className="link-primary">Register</Link>
                   </p>
                 </div>
               </Form>
@@ -93,7 +91,7 @@ function Login() {
   );
 }
 
-export default Login;
+export default Emp_Login;
 
 
 
