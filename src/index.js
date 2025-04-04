@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Header from './pages/Header';
-import Emp_Login from './pages/Emp_Login';
-import Emp_Register from './pages/Emp_Register';
+import EmpLogin from './pages/Emp/Login';
+import EmpRegister from './pages/Emp/Register';
 import Role from './pages/Role'
 import Logout from './pages/Logout'
 import { AuthProvider } from './pages/Auth_Context';
@@ -19,8 +19,8 @@ root.render(
         <Header />
         <Routes>
           <Route path='/' element={<App />} />
-          <Route path='/Emp_Login' element={<Emp_Login />} />
-          <Route path='/Emp_Register' element={<Emp_Register />} />
+          <Route path='/Emp/Login' element={<EmpLogin />} />
+          <Route path='/Emp/Register' element={<EmpRegister />} />
           <Route path='/Role' element={<Role />} />
           <Route path='/Logout' element={<Logout />} />
         </Routes>

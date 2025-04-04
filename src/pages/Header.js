@@ -5,6 +5,7 @@ import { AuthContext } from './Auth_Context';
 
 function Header() {
   const {authData} = useContext(AuthContext)
+  console.log(authData.fnm)
   return (
     <Navbar expand="lg" className="bg-primary">
       <Container>
@@ -13,10 +14,10 @@ function Header() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/" className='text-white'>Home</Nav.Link>
-            {authData.fnm==='' ? ( 
+            {authData.fnm===null ? ( 
             <>
             <NavDropdown title={<span style={{ color: 'white' }}>Login</span>} id="basic-nav-dropdown">
-              <NavDropdown.Item as={Link} to='/Emp_Login'>Employee</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to='/Emp/Login'>Employee</NavDropdown.Item>
               <NavDropdown.Item as={Link} to='/Login'>HR</NavDropdown.Item>
               <NavDropdown.Item as={Link} to='/Login'>Admin</NavDropdown.Item>
             </NavDropdown>

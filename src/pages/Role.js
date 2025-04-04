@@ -8,7 +8,7 @@ const Role = () => {
       <h1 className="my-5">Select Your Role</h1>
       <Row>
         <Col md={4}>
-          <Link to={'/Emp_Login'}>
+          <Link to={'/Emp/Login'}>
             <Button variant="primary" className="btn-lg">Employee</Button>
           </Link>
         </Col>

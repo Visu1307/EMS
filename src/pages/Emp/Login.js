@@ -1,16 +1,23 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
-import loginImage from '../images/Login.gif';
+import loginImage from './images/Login.gif';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from './Auth_Context';
+import { AuthContext } from '../Auth_Context';
 
 function Emp_Login() {
+  const {authData} = useContext(AuthContext)
+  const navigate = useNavigate()
+  useEffect(()=>{
+    if(authData.fnm!==null){
+      alert('You have been already logged in')
+      navigate('/')
+    }
+  })
   const [email,setEmail] = useState('')
   const [pass,setPass] = useState('')
   const role = 'emp'
   const {setAuthData} = useContext(AuthContext)
-  const navigate = useNavigate()
   const validateForm = () => {
     return(
       email.trim() !== '' &&
