@@ -1,45 +1,51 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Button, Container, Row, Col, Form } from 'react-bootstrap';
+import React, { useContext, useState } from 'react';
+import { Button, Container, Row, Col, Form, Toast, ToastContainer } from 'react-bootstrap';
 import loginImage from '../images/Login.gif';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../Auth_Context';
 
-function Emp_Login() {
-  const {authData} = useContext(AuthContext)
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (authData.fnm) {
-      alert('You have already logged in');
-      navigate('/');
-    }
-  }, [navigate]);
-  const [email,setEmail] = useState('')
-  const [pass,setPass] = useState('')
-  const role = 'emp'
-  const {setAuthData} = useContext(AuthContext)
-  const validateForm = () => {
-    return(
-      email.trim() !== '' &&
-      pass.trim() !== ''
-    )
-  }
+function HR_Login() {
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
+  const [error,setError] = useState(false);
+  const [errData,setErrData] = useState()
+  const showToast = () => setError(false);
+  const role = 'hr';
+  const { setAuthData } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const validateForm = () => email.trim() !== '' && pass.trim() !== '';
+
   const handleSubmit = (e) => {
-    e.preventDefault()
-    axios.post("http://localhost:3001/Emp/Login",{email,pass})
-    .then(res => {
-      if(res.data.status==="Success"){
-        const fnm=res.data.firstName;
-        setAuthData({fnm,email,role})
-        navigate('/Emp/Dashboard')
-      }
-      else{
-        alert(res.data)
-      }
-    })
-  }
+    e.preventDefault();
+    axios.post("http://localhost:3001/HR/Login", { email, pass })
+      .then(res => {
+        if (res.data === "Success") {
+          setAuthData({ email, role });
+          navigate('/');
+        } else {
+          setError(true);
+          setErrData(res.data)
+        }
+      });
+  };
+
   return (
     <div>
+      <ToastContainer
+        className="p-3"
+        position={'top-end'}
+        style={{ marginTop:70,zIndex: 1 }}
+      >
+        <Toast show={error} onClose={showToast}>
+          <Toast.Header>
+            ❌
+            <strong className="me-auto mx-2">Error</strong>
+          </Toast.Header>
+          <Toast.Body className='text-danger'>{errData}</Toast.Body>
+        </Toast>
+      </ToastContainer>
       <section className="vh-100">
         <Container fluid className="h-custom my-5">
           <Row className="d-flex justify-content-center align-items-center h-100">
@@ -53,7 +59,7 @@ function Emp_Login() {
             <Col xs={12} md={8} lg={6} xl={4} className="offset-xl-1">
               <Form onSubmit={handleSubmit}>
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-center justify-content-lg-start">
-                  <p className="fs-1">Employee Login</p>
+                  <p className="fs-1">HR Login</p> {/* Changed title */}
                 </div>
 
                 {/* Email input */}
@@ -81,13 +87,13 @@ function Emp_Login() {
                     variant="primary"
                     size="lg"
                     style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
-                    type='submit'
+                    type="submit"
                     disabled={!validateForm()}
                   >
                     Login
                   </Button>
                   <p className="small fw-bold mt-2 pt-1 mb-0">
-                    Don't have an account? <Link to="/Emp/Register" className="link-primary">Register</Link>
+                    Don't have an account? <Link to="/HR/register" className="link-primary">Register</Link> {/* Changed link */}
                   </p>
                 </div>
               </Form>
@@ -99,9 +105,4 @@ function Emp_Login() {
   );
 }
 
-export default Emp_Login;
-
-
-
-
-
+export default HR_Login;

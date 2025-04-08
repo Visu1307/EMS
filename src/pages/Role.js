@@ -13,12 +13,12 @@ const Role = () => {
           </Link>
         </Col>
         <Col md={4}>
-          <Link to="/Login">
+          <Link to="/HR/Login">
             <Button variant="primary" className="btn-lg">HR</Button>
           </Link>
         </Col>
         <Col md={4}>
-          <Link to="/Login">
+          <Link to="/Admin/Login">
             <Button variant="primary" className="btn-lg">Admin</Button>
           </Link>
         </Col>

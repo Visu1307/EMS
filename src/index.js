@@ -7,6 +7,10 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Header from './pages/Header';
 import EmpLogin from './pages/Emp/Login';
 import EmpRegister from './pages/Emp/Register';
+import EmpDashboard from './pages/Emp/Dashboard';
+import HRLogin from './pages/HR/Login';
+import HRRegister from './pages/HR/Register'
+import AdminLogin from './pages/Admin/Login'
 import Role from './pages/Role'
 import Logout from './pages/Logout'
 import { AuthProvider } from './pages/Auth_Context';
@@ -21,6 +25,10 @@ root.render(
           <Route path='/' element={<App />} />
           <Route path='/Emp/Login' element={<EmpLogin />} />
           <Route path='/Emp/Register' element={<EmpRegister />} />
+          <Route path='/Emp/Dashboard' element={<EmpDashboard/>}/>
+          <Route path='/HR/Login' element={<HRLogin/>}/>
+          <Route path='/HR/Register' element={<HRRegister/>}/>
+          <Route path='/Admin/Login' element={<AdminLogin/>}/>
           <Route path='/Role' element={<Role />} />
           <Route path='/Logout' element={<Logout />} />
         </Routes>

@@ -8,7 +8,10 @@ const EmployeeSchema = new mongoose.Schema({
   dateOfBirth: Date,
   gender: String,
   role: String,
-  pass: String
+  pass: String,
+  isApproved:{type:Boolean,default:false},
+  department:{type:String,default:"None"},
+  salary:{type:Number,default:0}
 })
 
 const EmpModel = mongoose.model('emp', EmployeeSchema);

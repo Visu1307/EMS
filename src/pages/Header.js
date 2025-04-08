@@ -18,8 +18,8 @@ function Header() {
             <>
             <NavDropdown title={<span style={{ color: 'white' }}>Login</span>} id="basic-nav-dropdown">
               <NavDropdown.Item as={Link} to='/Emp/Login'>Employee</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to='/Login'>HR</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to='/Login'>Admin</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to='/HR/Login'>HR</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to='/Admin/Login'>Admin</NavDropdown.Item>
             </NavDropdown>
             </>
             ) : ( 

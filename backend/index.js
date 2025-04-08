@@ -9,7 +9,25 @@ app.use(cors())
 
 mongoose.connect("mongodb://127.0.0.1:27017/employee");
 
-app.post('/Emp_Login',(req,res) => {
+app.post('/Emp/Login',(req,res) => {
+    const formData = req.body;
+    EmpModel.findOne({email:formData.email})
+    .then(emp=>{
+        if(emp){
+            if(emp.pass==formData.pass){
+                res.json({status:"Success",firstName:emp.firstName})
+            }
+            else{
+                res.json("Password doesn't match")
+            }
+        }
+        else{
+            res.json("User doesn't exist")
+        }
+    })
+})
+
+app.post('/HR/Login',(req,res) => {
     const {email,pass} = req.body;
     EmpModel.findOne({email:email})
     .then(emp=>{
@@ -27,7 +45,7 @@ app.post('/Emp_Login',(req,res) => {
     })
 })
 
-app.post('/Emp_Register', (req, res) => {
+app.post('/Emp/Register', (req, res) => {
     //const[fnm,lnm,email,phone,dob,gender,pass,confPass] = req.body
     EmpModel.create(req.body)
     .then(emp=>req.json(emp))

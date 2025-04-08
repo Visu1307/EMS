@@ -1,47 +1,65 @@
-import React, { useState } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import axios from "axios";
+import React, { useState } from "react"; 
+import { Form, Button, Container, Row, Col } from "react-bootstrap"; 
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios"; 
 const Emp_Register = () => {
-  const[firstName,setFnm] = useState()
-  const[lastName,setLnm] = useState()
-  const[email,setEmail] = useState()
-  const[phone,setPhone] = useState()
-  const[dob,setDOB] = useState()
-  const[gender,setGender] = useState()
-  const[pass,setPass] = useState()
-  const[confPass,setconfPass] = useState()
-  const role = 'emp'
-  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    dob: '',
+    gender: '',
+    pass: '',
+    confPass: '',
+  });
+  const role = 'emp';
+  const navigate = useNavigate();
 
   const validateForm = () => {
     return (
-      firstName.trim() !== '' &&
-      lastName.trim() !== '' &&
-      email.trim() !== '' &&
-      phone.trim() !== '' &&
-      dob.trim() !== '' &&
-      gender.trim() !=='' &&
-      pass.trim() !== '' &&
-      confPass.trim() !== '' &&
-      pass === confPass
+      formData.firstName.trim() !== '' &&
+      formData.lastName.trim() !== '' &&
+      formData.email.trim() !== '' &&
+      formData.phone.trim() !== '' &&
+      formData.dob.trim() !== '' &&
+      formData.gender.trim() !== '' &&
+      formData.pass.trim() !== '' &&
+      formData.confPass.trim() !== '' &&
+      formData.pass === formData.confPass
     );
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData, // Retain existing data
+      [name]: value, // Update the specific field
+    });
+  };
+
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if(!validateForm()){
-      alert('Please fill out all fields and make sure passwords does match')
-      return
+    e.preventDefault();
+
+    // Append the role to formData
+    const updatedFormData = { ...formData, role };
+
+    if (!validateForm()) {
+      alert('Please fill out all fields and make sure passwords match');
+      return;
     }
 
     axios
-      .post('http://localhost:3001/Emp_Register',{firstName,lastName,email,phone,dob,gender,role,pass})
-      .then((result)=>console.log('Employee Registered Successfully',result.data))
-      alert('Employee Registered Successfully')
-      navigate('/Emp_Login')
-  }
+      .post('http://localhost:3001/Emp/Register', updatedFormData)
+      .then((result) => {
+        console.log('Employee Registered Successfully', result.data);
+        alert('Employee Registered Successfully');
+        navigate('/Emp/Login');
+      })
+      .catch((error) => {
+        console.error('Error registering employee:', error);
+      });
+  };
 
   return (
     <Container className="my-5">
@@ -51,13 +69,25 @@ const Emp_Register = () => {
           <Col md={6}>
             <Form.Group controlId="firstName">
               <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" name="firstName" value={firstName} onChange={(e) => setFnm(e.target.value)} required />
+              <Form.Control
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="lastName">
               <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" name="lastName" value={lastName} onChange={(e) => setLnm(e.target.value)} required />
+              <Form.Control
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Col>
         </Row>
@@ -65,27 +95,50 @@ const Emp_Register = () => {
           <Col md={6}>
             <Form.Group controlId="email">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Form.Control
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="phone">
               <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+              <Form.Control
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Col>
         </Row>
         <Row>
           <Col md={6}>
-            <Form.Group controlId="dateOfBirth">
+            <Form.Group controlId="dob">
               <Form.Label>Date of Birth</Form.Label>
-              <Form.Control type="date" name="dateOfBirth" value={dob} onChange={(e) => setDOB(e.target.value)} required />
+              <Form.Control
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="gender">
               <Form.Label>Gender</Form.Label>
-              <Form.Select name="gender" value={gender} onChange={(e) => setGender(e.target.value)} required>
+              <Form.Select
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                required
+              >
                 <option value="">Select</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -94,58 +147,35 @@ const Emp_Register = () => {
             </Form.Group>
           </Col>
         </Row>
-        {/* <Row> */}
-          {/* <Col md={6}>
-            <Form.Group controlId="department">
-              <Form.Label>Department</Form.Label>
-              <Form.Control type="text" name="department" value={formData.department} onChange={handleChange} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="designation">
-              <Form.Label>Designation</Form.Label>
-              <Form.Control type="text" name="designation" value={formData.designation} onChange={handleChange} required />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <Form.Group controlId="dateOfJoining">
-              <Form.Label>Date of Joining</Form.Label>
-              <Form.Control type="date" name="dateOfJoining" value={formData.dateOfJoining} onChange={handleChange} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="employmentType">
-              <Form.Label>Employment Type</Form.Label>
-              <Form.Select name="employmentType" value={formData.employmentType} onChange={handleChange} required>
-                <option value="">Select</option>
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        </Row>
-        <Form.Group controlId="salary">
-          <Form.Label>Salary</Form.Label>
-          <Form.Control type="number" name="salary" value={formData.salary} onChange={handleChange} required />
-        </Form.Group> */}
         <Row>
           <Col md={6}>
             <Form.Group controlId="password">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" name="password" value={pass} onChange={(e) => setPass(e.target.value)} required />
+              <Form.Control
+                type="password"
+                name="pass"
+                value={formData.pass}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Col>
           <Col md={6}>
             <Form.Group controlId="confirmPassword">
               <Form.Label>Confirm Password</Form.Label>
-              <Form.Control type="password" name="confirmPassword" value={confPass} onChange={(e) => setconfPass(e.target.value)} required />
+              <Form.Control
+                type="password"
+                name="confPass"
+                value={formData.confPass}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Col>
         </Row>
-        <Button variant="primary" type="submit" className="mt-3 w-100">Register</Button>
+        <Button variant="primary" type="submit" className="mt-3 w-100">
+          Register
+        </Button>
       </Form>
     </Container>
   );
