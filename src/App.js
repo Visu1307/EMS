@@ -1,10 +1,13 @@
-import { Button, Col, Container, Row, Image} from "react-bootstrap";
-import Hero from './images/HOME.gif'
-import {Link} from 'react-router-dom'
+import { Button, Col, Container, Row, Image, Card, Badge } from "react-bootstrap";
+import Hero from './images/HOME.gif';
+import { Link } from 'react-router-dom';
 import { useContext } from "react";
 import { AuthContext } from "./pages/Auth_Context";
+import './App.css'; // Custom CSS for styling
+
 function App() {
-  const {authData} = useContext(AuthContext)
+  const { authData } = useContext(AuthContext);
+
   return (
     <div className="App">
       <Container className="my-5">

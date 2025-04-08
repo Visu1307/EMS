@@ -1,154 +1,315 @@
 import React, { useState } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Alert,
+  Card,
+} from "react-bootstrap";
+import { FaPlus, FaTrash } from "react-icons/fa";
 
-const Emp_Register = () => {
-  const[firstName,setFnm] = useState()
-  const[lastName,setLnm] = useState()
-  const[email,setEmail] = useState()
-  const[phone,setPhone] = useState()
-  const[dob,setDOB] = useState()
-  const[gender,setGender] = useState()
-  const[pass,setPass] = useState()
-  const[confPass,setconfPass] = useState()
-  const role = 'emp'
-  const navigate = useNavigate()
+const EmployeeRegistration = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    role: "",
+    password: "",
+    confirmPassword: "",
+    dob: "",
+    qualifications: [{ degree: "", score: "", scoreType: "CGPA" }],
+    resume: null,
+  });
 
-  const validateForm = () => {
-    return (
-      firstName.trim() !== '' &&
-      lastName.trim() !== '' &&
-      email.trim() !== '' &&
-      phone.trim() !== '' &&
-      dob.trim() !== '' &&
-      gender.trim() !=='' &&
-      pass.trim() !== '' &&
-      confPass.trim() !== '' &&
-      pass === confPass
-    );
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "resume") {
+      const file = files[0];
+      if (file && file.type !== "application/pdf") {
+        setError("Only PDF files are allowed for resume.");
+        return;
+      }
+      setFormData({ ...formData, resume: file });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const handleQualificationChange = (index, field, value) => {
+    const updatedQualifications = [...formData.qualifications];
+    updatedQualifications[index][field] = value;
+    setFormData({ ...formData, qualifications: updatedQualifications });
+  };
+
+  const addQualification = () => {
+    setFormData({
+      ...formData,
+      qualifications: [
+        ...formData.qualifications,
+        { degree: "", score: "", scoreType: "CGPA" },
+      ],
+    });
+  };
+
+  const removeQualification = (index) => {
+    const updatedQualifications = [...formData.qualifications];
+    updatedQualifications.splice(index, 1);
+    setFormData({ ...formData, qualifications: updatedQualifications });
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if(!validateForm()){
-      alert('Please fill out all fields and make sure passwords does match')
-      return
+    e.preventDefault();
+    const {
+      name,
+      email,
+      phone,
+      role,
+      password,
+      confirmPassword,
+      dob,
+      resume,
+      qualifications,
+    } = formData;
+
+    if (
+      !name ||
+      !email ||
+      !phone ||
+      !role ||
+      !password ||
+      !confirmPassword ||
+      !dob ||
+      !resume
+    ) {
+      setError("All fields are required.");
+      return;
     }
 
-    axios
-      .post('http://localhost:3001/Emp_Register',{firstName,lastName,email,phone,dob,gender,role,pass})
-      .then((result)=>console.log('Employee Registered Successfully',result.data))
-      alert('Employee Registered Successfully')
-      navigate('/Emp_Login')
-  }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setError(null);
+    console.log("Employee Registration Data:", formData);
+    alert("Employee Registered Successfully!");
+  };
 
   return (
-    <Container className="my-5">
-      <h2 className="text-center text-primary my-3">Employee Registration</h2>
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col md={6}>
-            <Form.Group controlId="firstName">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control type="text" name="firstName" value={firstName} onChange={(e) => setFnm(e.target.value)} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="lastName">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control type="text" name="lastName" value={lastName} onChange={(e) => setLnm(e.target.value)} required />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="phone">
-              <Form.Label>Phone</Form.Label>
-              <Form.Control type="text" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <Form.Group controlId="dateOfBirth">
-              <Form.Label>Date of Birth</Form.Label>
-              <Form.Control type="date" name="dateOfBirth" value={dob} onChange={(e) => setDOB(e.target.value)} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="gender">
-              <Form.Label>Gender</Form.Label>
-              <Form.Select name="gender" value={gender} onChange={(e) => setGender(e.target.value)} required>
-                <option value="">Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        </Row>
-        {/* <Row> */}
-          {/* <Col md={6}>
-            <Form.Group controlId="department">
-              <Form.Label>Department</Form.Label>
-              <Form.Control type="text" name="department" value={formData.department} onChange={handleChange} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="designation">
-              <Form.Label>Designation</Form.Label>
-              <Form.Control type="text" name="designation" value={formData.designation} onChange={handleChange} required />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <Form.Group controlId="dateOfJoining">
-              <Form.Label>Date of Joining</Form.Label>
-              <Form.Control type="date" name="dateOfJoining" value={formData.dateOfJoining} onChange={handleChange} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="employmentType">
-              <Form.Label>Employment Type</Form.Label>
-              <Form.Select name="employmentType" value={formData.employmentType} onChange={handleChange} required>
-                <option value="">Select</option>
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        </Row>
-        <Form.Group controlId="salary">
-          <Form.Label>Salary</Form.Label>
-          <Form.Control type="number" name="salary" value={formData.salary} onChange={handleChange} required />
-        </Form.Group> */}
-        <Row>
-          <Col md={6}>
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" name="password" value={pass} onChange={(e) => setPass(e.target.value)} required />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="confirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control type="password" name="confirmPassword" value={confPass} onChange={(e) => setconfPass(e.target.value)} required />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Button variant="primary" type="submit" className="mt-3 w-100">Register</Button>
-      </Form>
+    <Container
+      fluid
+      className="d-flex justify-content-center align-items-center min-vh-100 bg-light py-5"
+    >
+      <Row className="w-100 justify-content-center">
+        <Col xs={12} md={10} lg={10} xl={9} xxl={8}>
+          <Card className="shadow-lg p-4 border-0">
+            <h2 className="text-center mb-4 text-primary">
+              Employee Registration
+            </h2>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Full Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Enter full name"
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Enter email"
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Phone</Form.Label>
+                    <Form.Control
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="Enter phone"
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Date of Birth</Form.Label>
+                    <Form.Control
+                      type="date"
+                      name="dob"
+                      value={formData.dob}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Role</Form.Label>
+                <Form.Select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Role</option>
+                  <option value="Manager">Manager</option>
+                  <option value="HR">HR</option>
+                  <option value="Developer">Developer</option>
+                  <option value="Designer">Designer</option>
+                  <option value="Intern">Intern</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Enter password"
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm password"
+                      required
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+
+              <h5 className="mt-4">Qualifications</h5>
+              {formData.qualifications.map((q, idx) => (
+                <Row key={idx} className="align-items-end mb-3">
+                  <Col md={5}>
+                    <Form.Group>
+                      <Form.Label>Degree</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={q.degree}
+                        onChange={(e) =>
+                          handleQualificationChange(idx, "degree", e.target.value)
+                        }
+                        placeholder="e.g., B.Tech, M.Sc"
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+
+                  <Col md={2}>
+                    <Form.Group>
+                      <Form.Label>Score</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={q.score}
+                        onChange={(e) =>
+                          handleQualificationChange(idx, "score", e.target.value)
+                        }
+                        placeholder="e.g., 8.5 or 75%"
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+
+                  <Col md={3}>
+                    <Form.Group>
+                      <Form.Label>Type</Form.Label>
+                      <Form.Select
+                        value={q.scoreType}
+                        onChange={(e) =>
+                          handleQualificationChange(idx, "scoreType", e.target.value)
+                        }
+                        required
+                      >
+                        <option value="CGPA">CGPA</option>
+                        <option value="Percentage">Percentage</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+
+                  <Col md={2}>
+                    {formData.qualifications.length > 1 && (
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => removeQualification(idx)}
+                        className="mt-4"
+                      >
+                        <FaTrash />
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              ))}
+
+              <Button
+                variant="outline-primary"
+                type="button"
+                onClick={addQualification}
+                className="mb-4"
+              >
+                <FaPlus className="me-2" /> Add Qualification
+              </Button>
+
+              <Form.Group className="mb-4">
+                <Form.Label>Upload Resume (PDF Only)</Form.Label>
+                <Form.Control
+                  type="file"
+                  name="resume"
+                  accept=".pdf"
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+
+              <Button variant="primary" type="submit" className="w-100 py-2">
+                Register Employee
+              </Button>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };
 
-export default Emp_Register;
+export default EmployeeRegistration;

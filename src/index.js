@@ -1,17 +1,22 @@
 import React from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './pages/Header';
 import EmpLogin from './pages/Emp/Login';
 import EmpRegister from './pages/Emp/Register';
 import Role from './pages/Role'
 import Logout from './pages/Logout'
 import { AuthProvider } from './pages/Auth_Context';
+import HRDashboard from './pages/HRDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import EmployeeDashboard from './pages/EmployeeDashboard';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
     <AuthProvider>
@@ -29,7 +34,5 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// If you want to start measuring performance, log results (e.g., reportWebVitals(console.log))
 reportWebVitals();
